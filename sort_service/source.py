@@ -3,21 +3,21 @@ import os
 
 # filling array 
 # with upload images
-def fill_array(array: list):
+def fill_array(array: dict):
     for filename in os.listdir(os.path.join(os.path.dirname(__file__),'array')):
         if filename[filename.rfind(".") + 1:] in ['jpg', 'jpeg', 'png']:
-            print(filename)
+            # print(filename)
             # name = str(filename)
             img = cv2.imread(os.path.join(os.path.dirname(__file__),'array', filename))
-            array.append(img)
+            array[str(filename)] = img
     return array
 
 # try to calculate average image's colour 
-def mean_colour(array: list):
-    img_list = []
-    scale_percent = 10 # percent of original size for percent resize
-
-    for image in array:
+def mean_colour(array: dict):
+    img_list = {}
+    scale_percent = 5 # percent of original size for percent resize
+    # print(array.keys())
+    for image in array.keys():
 
         # one size resize
         # width = 150
@@ -25,16 +25,16 @@ def mean_colour(array: list):
         # dim = (width, height)
 
         # percent resize
-        width = int(image.shape[1] * scale_percent / 100)
-        height = int(image.shape[0] * scale_percent / 100)
+        width = int(array[image].shape[1] * scale_percent / 100)
+        height = int(array[image].shape[0] * scale_percent / 100)
         dim = (width, height)
-        img = image.copy() #copy for resizing
+        img = array[image].copy() #copy for resizing
         img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        img_list.append(img)
+        img_list[image] = img
     
-    average_value_colour = []
-    for img in img_list:
-        size = img.shape
+    average_value_colour = {}
+    for img in img_list.keys():
+        size = img_list[img].shape
         sq = [0,0,0] #Массив для общего подсчета
         width = size[0] #Ширина
         height = size[1] #Высота
@@ -42,24 +42,48 @@ def mean_colour(array: list):
 
         for i in range(width): #Цикл по ширине
             for j in range(height): #Цикл по высоте
-                sq[0] += img[i, j][0] #b
-                sq[1] += img[i, j][1] #g
-                sq[2] += img[i, j][2] #r
+                sq[0] += img_list[img][i, j][0] #b
+                sq[1] += img_list[img][i, j][1] #g
+                sq[2] += img_list[img][i, j][2] #r
 	
         out = [0, 0, 0] #Массив для средних значений
         out[0] = int(sq[0]/count) #Средние значения
         out[1] = int(sq[1]/count)
         out[2] = int(sq[2]/count)
-        average_value_colour.append(out)
-        print(f'Средний цвет: rgb({out[2]}, {out[1]}, {out[0]})')
-        hexed = '#' + format(out[2], 'x') + format(out[1], 'x') + format(out[0], 'x') #Перевод в HEX
-        print(f'hex: {hexed}')
+        average_value_colour[img] = out
+        # print(f'Средний цвет: rgb({out[2]}, {out[1]}, {out[0]})')
+        # hexed = '#' + format(out[2], 'x') + format(out[1], 'x') + format(out[0], 'x') #Перевод в HEX
+        # print(f'hex: {hexed}')
     return average_value_colour
     
-def temp_processing():
-    pass
+def temp_processing(average_arr: dict, target_colour: str):
+    # colour_dict = {'black':0, 'blue':1, 'green':2, 'red':3, 'white':4}
+    result = []
+    try:
+        # for colour in colour_dict.keys():
+        #     if tagret_colour.lower() == colour:
+        #         target = colour_dict[colour]
+        # print(target)
+        
+        #conditions needs to be changed
+        match target_colour:
+            case 'black':
+                for filename in average_arr.keys():
+                    if (average_arr[filename][0] == average_arr[filename][1]) and (average_arr[filename][0] == average_arr[filename][2]) and (average_arr[filename][0] <= 120):
+                        result.append(filename)
+                return result
+            case _:
+                print('oh hellow there')
+                
+
+
+    except:
+        print('your colour is not supported')
 
 if __name__ == '__main__':
-    array = []
-    array = fill_array(array)
-    average_colour_value = mean_colour(array)
+    dick = {}
+    dick = fill_array(dick)
+    average_colour_value_dick = mean_colour(dick)
+    # print('\n'.join("{}\t{}".format(k, v) for k, v in average_colour_value_dick.items()))
+    result = temp_processing(average_arr=average_colour_value_dick, target_colour = 'black')
+    print(result)
