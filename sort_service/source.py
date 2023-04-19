@@ -1,3 +1,5 @@
+# python 3.10 
+# cv2
 import cv2
 import os
 
@@ -56,60 +58,57 @@ def mean_colour(array: dict):
     return average_value_colour
     
 def temp_processing(average_arr: dict, target_colour: str):
-    # colour_dict = {'black':0, 'blue':1, 'green':2, 'red':3, 'white':4}
     result = []
-    # try:
-        # for colour in colour_dict.keys():
-        #     if tagret_colour.lower() == colour:
-        #         target = colour_dict[colour]
-        # print(target)
-        
-        #conditions needs to be changed
-    
+
+    #conditions needs to be changed
     match target_colour:
         case 'black':
             for filename in average_arr.keys():
                 acceptable_black_or_white_range = range(min(average_arr[filename]), min(average_arr[filename])+10, 1)
+
                 if average_arr[filename][0] in acceptable_black_or_white_range and \
                     average_arr[filename][1] in acceptable_black_or_white_range and \
                         average_arr[filename][1] in acceptable_black_or_white_range and \
                             min(acceptable_black_or_white_range) <= 120:
                     result.append(filename)
+
         case 'white':
             for filename in average_arr.keys():
                 acceptable_black_or_white_range = range(min(average_arr[filename]), min(average_arr[filename])+10, 1)
+
                 if average_arr[filename][0] in acceptable_black_or_white_range and \
                     average_arr[filename][1] in acceptable_black_or_white_range and \
                         average_arr[filename][1] in acceptable_black_or_white_range and \
                             min(acceptable_black_or_white_range) >= 120:
                     result.append(filename)
+
         case 'blue':
             for filename in average_arr.keys():
                 if average_arr[filename][0] > average_arr[filename][1] and \
                     average_arr[filename][0] > average_arr[filename][2]:
                     result.append(filename)
+
         case 'green':
             for filename in average_arr.keys():
                 if average_arr[filename][1] > average_arr[filename][0] and \
                     average_arr[filename][1] > average_arr[filename][2]:
                     result.append(filename)
+
         case 'red':
             for filename in average_arr.keys():
                 if average_arr[filename][2] > average_arr[filename][1] and \
                     average_arr[filename][2] > average_arr[filename][0]:
                     result.append(filename)
+
         case _:
             print('oh hellow there, your colour is not supported')
 
     return result
-
-    # except:
-    #     print('your colour is not supported')
 
 if __name__ == '__main__':
     dick = {}
     dick = fill_array(dick)
     average_colour_value_dick = mean_colour(dick)
     print('\n'.join("{}\t{}".format(k, v) for k, v in average_colour_value_dick.items()))
-    result = temp_processing(average_arr=average_colour_value_dick, target_colour = 'black')
+    result = temp_processing(average_arr=average_colour_value_dick, target_colour = 'yellow')
     print(result)
