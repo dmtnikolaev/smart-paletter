@@ -65,16 +65,23 @@ def temp_processing(average_arr: dict, target_colour: str):
         # print(target)
         
         #conditions needs to be changed
+    
     match target_colour:
         case 'black':
             for filename in average_arr.keys():
-                if (average_arr[filename][0] == average_arr[filename][1]) and \
-                    (average_arr[filename][0] == average_arr[filename][2]) and (average_arr[filename][0] <= 120):
+                acceptable_black_or_white_range = range(min(average_arr[filename]), min(average_arr[filename])+10, 1)
+                if average_arr[filename][0] in acceptable_black_or_white_range and \
+                    average_arr[filename][1] in acceptable_black_or_white_range and \
+                        average_arr[filename][1] in acceptable_black_or_white_range and \
+                            min(acceptable_black_or_white_range) <= 120:
                     result.append(filename)
         case 'white':
             for filename in average_arr.keys():
-                if (average_arr[filename][0] == average_arr[filename][1]) and \
-                    (average_arr[filename][0] == average_arr[filename][2]) and (average_arr[filename][0] >= 150):
+                acceptable_black_or_white_range = range(min(average_arr[filename]), min(average_arr[filename])+10, 1)
+                if average_arr[filename][0] in acceptable_black_or_white_range and \
+                    average_arr[filename][1] in acceptable_black_or_white_range and \
+                        average_arr[filename][1] in acceptable_black_or_white_range and \
+                            min(acceptable_black_or_white_range) >= 120:
                     result.append(filename)
         case 'blue':
             for filename in average_arr.keys():
