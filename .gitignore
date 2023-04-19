@@ -1,0 +1,3 @@
+#ignore images in array
+/sort_service/array/*
+!/sort_service/array/.gitkeep
