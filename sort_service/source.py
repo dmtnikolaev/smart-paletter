@@ -1,9 +1,3 @@
-#####task####task####task####task####task####task####task####task####task####task####task#######
-# need to add gammacorr+ with any condition to lowgamma image
-# or
-# try HSV
-# or
-# need another way to solve this shit
 ################################################################################################
 # python 3.10 
 # cv2
@@ -171,14 +165,17 @@ def hsv_processing(average_arr: dict, target_colour:str):
     # gray 0 0 128
     # white 0 0 255
     color_table = {
-        'black': [range(0, 255), range(0, 30), range(0,50)],
-        'gray': [range(0, 255), range(0, 30), range(51,189)],
-        'white': [range(0, 255), range(0, 30), range(190,255)],
+        'black': [range(0, 179), range(0, 30), range(0,50)],
+        'gray': [range(0, 179), range(0, 30), range(51,189)],
+        'white': [range(0, 179), range(0, 30), range(190,255)],
         'red': [range(0, 10), range(70, 255), range(40,255)],
-        'red2': [range(245, 255), range(70, 255), range(40,255)],
+        'red2': [range(161, 179), range(70, 255), range(40,255)],
         'orange': [range(11, 25), range(60, 255), range(40,170)],
         'yellow': [range(20, 40), range(140, 255), range(100,255)],
-        'green': [range(41, 80), range(50, 255), range(50,255)]
+        'green': [range(41, 79), range(50, 255), range(50,255)],
+        'teal': [range(80, 100), range(50, 255), range(50,255)],
+        'blue': [range(101, 139), range(50, 255), range(50,255)],
+        'purple': [range(140, 160), range(50, 255), range(50,255)]
     }
     result = []
 
@@ -198,7 +195,6 @@ def hsv_processing(average_arr: dict, target_colour:str):
                 if average_arr[filename][1] in color_table['white'][1] and \
                 average_arr[filename][2] in color_table['white'][2]:
                     result.append(filename)
-
         case 'red':
             for filename in average_arr.keys():
                 if (average_arr[filename][0] in color_table['red'][0] and \
@@ -226,20 +222,33 @@ def hsv_processing(average_arr: dict, target_colour:str):
                     average_arr[filename][1] in color_table['green'][1] and \
                     average_arr[filename][2] in color_table['green'][2]:
                     result.append(filename)
-    
+        case 'teal':
+            for filename in average_arr.keys():
+                if average_arr[filename][0] in color_table['teal'][0] and \
+                    average_arr[filename][1] in color_table['teal'][1] and \
+                    average_arr[filename][2] in color_table['teal'][2]:
+                    result.append(filename)
+        case 'blue':
+            for filename in average_arr.keys():
+                if average_arr[filename][0] in color_table['blue'][0] and \
+                    average_arr[filename][1] in color_table['blue'][1] and \
+                    average_arr[filename][2] in color_table['blue'][2]:
+                    result.append(filename)
+        case 'purple':
+            for filename in average_arr.keys():
+                if average_arr[filename][0] in color_table['purple'][0] and \
+                    average_arr[filename][1] in color_table['purple'][1] and \
+                    average_arr[filename][2] in color_table['purple'][2]:
+                    result.append(filename)
         case _:
-            print('oh hellow there, your colour is not supported')
+            print("oh hellow there! \n the program was created by a guy, who doesn't know this color name, try something simpler")
+            return
     return result
-
-
-
-
-
 
 if __name__ == '__main__':
     dick = {}
     dick = fill_array(dick)
     average_colour_value_dick = mean_colour(dick)
-    print('\n'.join("{}\t{}".format(k, v) for k, v in average_colour_value_dick.items()))
-    result = hsv_processing(average_arr=average_colour_value_dick, target_colour = 'green')
+    # print('\n'.join("{}\t{}".format(k, v) for k, v in average_colour_value_dick.items()))
+    result = hsv_processing(average_arr=average_colour_value_dick, target_colour = 'indigo')
     print(result)
