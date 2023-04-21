@@ -152,7 +152,7 @@ def mean_colour(array: dict):
 #     return result
 
 # try to processing palette in hsv colours
-def hsv_processing(average_arr: dict, target_colour:str):
+def hsv_processing(average_arr: dict, target_colour:str) -> list:
     # red (h = 0 +- 10) (s = 255) (v = 255)
     # yellow (h = 30 +- 10) (s = 255) (v = 255)
     # lime (h = 60 +- 10) (s = 255) (v = 255)
@@ -245,10 +245,15 @@ def hsv_processing(average_arr: dict, target_colour:str):
             return
     return result
 
-if __name__ == '__main__':
+def do_this()-> list:
     dick = {}
     dick = fill_array(dick)
     average_colour_value_dick = mean_colour(dick)
     # print('\n'.join("{}\t{}".format(k, v) for k, v in average_colour_value_dick.items()))
-    result = hsv_processing(average_arr=average_colour_value_dick, target_colour = 'indigo')
+    result = hsv_processing(average_arr=average_colour_value_dick, target_colour = 'teal')
+    return result
+
+
+if __name__ == '__main__':
+    result = do_this()
     print(result)
