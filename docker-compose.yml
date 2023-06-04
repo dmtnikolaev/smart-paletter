@@ -42,3 +42,19 @@ services:
       - APP_SETTINGS=src.config.DevelopmentConfig
     depends_on:
       - image-store
+
+  gateway:
+    build:
+      context: gateway
+      dockerfile: Dockerfile
+    entrypoint: ['/usr/src/app/entrypoint.sh']
+    volumes:
+      - './gateway:/usr/src/app'
+    ports:
+      - 5006:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=src.config.DevelopmentConfig
+    depends_on:
+      - image-store
+      - image-sorter

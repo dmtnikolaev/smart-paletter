@@ -48,7 +48,7 @@ class ImagesDownload(Resource):
         img = Image.query.filter_by(id=img_id).first()
         if not img:
             print(f'Image id={img_id} was not found')
-            return {'message': 'Image id={img_id} was not found'}, 404
+            return {'message': f'Image id={img_id} was not found'}, 404
 
         extension = img.path.split('.')[-1]
 

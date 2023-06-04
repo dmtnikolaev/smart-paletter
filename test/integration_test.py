@@ -2,8 +2,7 @@ import json
 import sys
 import requests
 
-STORE_URL = 'http://localhost:5004/'
-SORT_URL = 'http://localhost:5005/'
+URL = 'http://localhost:5006/'
 
 def main():
     imgs = sys.argv[1:]
@@ -18,12 +17,12 @@ def main():
             'Content-Type': 'image/' + im.split('.')[-1]
         }
         with open(im, 'rb') as f:
-            r = requests.post(STORE_URL + 'images', headers=headers, data=f)
+            r = requests.post(URL + 'image', headers=headers, data=f)
             ids.append(int(r.text))
 
     print('Sorting images...')
     headers = {'Content-Type': 'application/json'}
-    r = requests.post(SORT_URL + 'sort', headers=headers, data=json.dumps(ids))
+    r = requests.post(URL + 'image/sort', headers=headers, data=json.dumps(ids))
     print(r.content)
 
 
