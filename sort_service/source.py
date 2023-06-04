@@ -9,19 +9,19 @@ from sys import argv
 # filling array 
 # with upload images
 def fill_array(path:str, array: dict) -> dict:
-    # for filename in os.listdir(os.path.join(os.path.dirname(__file__),'array')):
     path_list = path.split(sep='/')
     # path_list.pop(0)
-    path_list.pop(-1)
-    print (path_list)
+    # path_list.pop(-1)
+    # print (path_list)
     array_path = os.path.join(*path_list)
     for filename in os.listdir(array_path):
-        print('filename =', filename)
         if filename[filename.rfind(".") + 1:] in ['jpg', 'jpeg', 'png']:
-            # print(filename)
-            # name = str(filename)
             img = cv2.imread(os.path.join(os.path.dirname(__file__),'array', filename))
             array[str(filename)] = img
+    # for x in array:
+    #     print(x)
+        # for y in array[x]:
+        #     print (y,':',array[x][y])
     return array
 
 # RGB -> resize -> hsv
@@ -29,10 +29,6 @@ def format_hsv_image(image):
     # one size resize
     width = 1
     height = 1
-
-    # percent resize
-    # width = int(array[image].shape[1] * scale_percent / 100)
-    # height = int(array[image].shape[0] * scale_percent / 100)
 
     dim = (width, height)
     img = image.copy() #copy for resizing
@@ -45,12 +41,6 @@ def resize_image(image):
     # one size resize
     width = 1
     height = 1
-
-    # percent resize
-    # scale_percent = 2
-    # width = int(array[image].shape[1] * scale_percent / 100)
-    # height = int(array[image].shape[0] * scale_percent / 100)
-
     dim = (width, height)
     img = image.copy() #copy for resizing
     img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
@@ -130,20 +120,20 @@ def do_harder(array_path, target:list, threshold:list) -> list:
     return result
 
 if __name__ == '__main__':
-    _, target_image_path, array_path = argv
-    # target_image_path = '/home/kefear/Documents/maga_2_sem/group_proj/smart-paletter/sort_service/array/pink1.jpg'
-    # path = '/home/kefear/Documents/maga_2_sem/group_proj/smart-paletter/sort_service/array/'
+    _, target_image_path, array_path, thresh = argv
+    # target_image_path = '/home/kefear/Documents/maga_2_sem/group_proj/smart-paletter/sort_service/array/black1.jpeg'
+    # array_path = '/Documents/maga_2_sem/group_proj/smart-paletter/sort_service/array'
     target_image = cv2.imread(target_image_path)
     target_image_hsv = format_hsv_image(target_image)
     target = calculate_mean_colour(target_image_hsv)
 
     thresholds = {}
-    thresholds['black_or_white'] = [255, 30, 30]
+    thresholds[0] = [255, 30, 30] # for black or white images
     thresholds[1] = [20, 30, 30]
     thresholds[2] = [30,60,60]
     thresholds[3] = [30,150,150]
     thresholds[4] = [40,200,200]
     thresholds[5] = [50, 205, 205]
 
-    result = do_harder(array_path, target, threshold = thresholds[2])
+    result = do_harder(array_path, target, threshold = thresholds[int(thresh)])
     print(result)
