@@ -93,6 +93,10 @@ class Test_source(unittest.TestCase):
     tih_green = format_hsv_image(target_green)
     t_green = calculate_mean_colour(tih_green)
 
+    target_red = cv2.imread(target_path_red)
+    tih_red = format_hsv_image(target_red)
+    t_red = calculate_mean_colour(tih_red)
+
 
     thresholds = {}
     thresholds[0] = [255, 30, 30] # for black or white images
@@ -122,7 +126,11 @@ class Test_source(unittest.TestCase):
 
     def test_3(self):
         result = source.do_harder(self.array_path, self.t_green, threshold=self.thresholds[3])
-        self.assertListEqual(['blue2.jpeg', 'blue1.jpg', 'blue3.jpg'], result)
+        self.assertListEqual(['green2.jpeg', 'green1.jpg', 'green3.jpg'], result)
+
+    def test_4(self):
+        result = source.do_harder(self.array_path, self.t_red, threshold=self.thresholds[2])
+        self.assertListEqual(['red1.jpeg'], result)
 
     # def test_do_this_black(self):
     #     result = source.do_this('black')
