@@ -10,7 +10,13 @@ from sys import argv
 # with upload images
 def fill_array(path:str, array: dict) -> dict:
     # for filename in os.listdir(os.path.join(os.path.dirname(__file__),'array')):
-    for filename in path:
+    path_list = path.split(sep='/')
+    # path_list.pop(0)
+    path_list.pop(-1)
+    print (path_list)
+    array_path = os.path.join(*path_list)
+    for filename in os.listdir(array_path):
+        print('filename =', filename)
         if filename[filename.rfind(".") + 1:] in ['jpg', 'jpeg', 'png']:
             # print(filename)
             # name = str(filename)
@@ -124,7 +130,7 @@ def do_harder(array_path, target:list, threshold:list) -> list:
     return result
 
 if __name__ == '__main__':
-    target_image_path, array_path = argv
+    _, target_image_path, array_path = argv
     # target_image_path = '/home/kefear/Documents/maga_2_sem/group_proj/smart-paletter/sort_service/array/pink1.jpg'
     # path = '/home/kefear/Documents/maga_2_sem/group_proj/smart-paletter/sort_service/array/'
     target_image = cv2.imread(target_image_path)
