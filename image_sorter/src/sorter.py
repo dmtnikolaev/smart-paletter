@@ -4,7 +4,11 @@
 ################################################################################################
 import cv2
 import os
+import numpy as np
+
 from sys import argv
+
+from src.api.models import Image
 
 # filling array 
 # with upload images
@@ -121,8 +125,7 @@ def do_harder(array_path, target:list, threshold:list) -> list:
 
 if __name__ == '__main__':
     _, target_image_path, array_path, thresh = argv
-    # target_image_path = '/home/kefear/Documents/maga_2_sem/group_proj/smart-paletter/sort_service/array/black1.jpeg'
-    # array_path = '/Documents/maga_2_sem/group_proj/smart-paletter/sort_service/array'
+    # target_image_path = '/home/kefear/Documents/maga_2_sem/group_proj/smart-paletter/sort_service/array/black1.jpeg' array_path = '/Documents/maga_2_sem/group_proj/smart-paletter/sort_service/array'
     target_image = cv2.imread(target_image_path)
     target_image_hsv = format_hsv_image(target_image)
     target = calculate_mean_colour(target_image_hsv)
@@ -137,3 +140,13 @@ if __name__ == '__main__':
 
     result = do_harder(array_path, target, threshold = thresholds[int(thresh)])
     print(result)
+
+def sort_images(images: list) -> list:
+    for im in images:
+        im_np = np.frombuffer(im.data, dtype='uint8')
+        target_im = cv2.imdecode(im_np, cv2.IMREAD_COLOR)
+        target_im_hsv = format_hsv_image(target_im)
+        im.mean_colour = calculate_mean_colour(target_im_hsv)
+
+    images = sorted(images, key=lambda x: x.mean_colour)
+    return images
